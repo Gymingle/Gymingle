@@ -1,0 +1,945 @@
+
+/* ============================================================
+   SHARED MOBILE BASE
+   ============================================================ */
+@media (max-width: 768px) {
+    .desktop-nav {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+
+    .mobile-menu.active {
+        display: block;
+        animation: slideDownMenu 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+}
+
+
+/* ============================================================
+   FIX 1 — HERO / HOME SECTION
+   Problem: Text overflows or misaligns on mobile because the
+   font sizes are desktop-only (4rem title, 2.2rem subtitle)
+   and the container has no min-height safeguard on small screens.
+   ============================================================ */
+
+/* --- Tablets (≤ 768 px) --- */
+@media (max-width: 768px) {
+
+    /* Give the hero a comfortable height without forcing 100vh
+       (which causes the text to be pushed off-screen on short
+       phones when the keyboard is open, etc.) */
+    .hero-premium.hero-bg-image {
+        min-height: 100svh;           /* svh = small viewport height, avoids browser-chrome issues */
+        min-height: 100vh;            /* fallback for browsers without svh */
+        padding: 100px 20px 80px;     /* top clearance for sticky header */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* The overlay must cover the full section */
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Centre-align the container on mobile */
+    .hero-premium-container.hero-centered-container {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Content block: full-width, centred, with breathing room */
+    .hero-centered-content {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 16px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Scale title down so it fits on a 375 px screen */
+    .hero-centered-title {
+        font-size: 2.4rem;
+        line-height: 1.15;
+        margin-bottom: 14px;
+        word-break: break-word;
+    }
+
+    /* Scale subtitle down proportionally */
+    .hero-centered-subtitle {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        padding-bottom: 12px;
+        margin-bottom: 0;
+    }
+
+    /* Stack the CTA buttons vertically and centre them */
+    .hero-cta-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100%;
+        max-width: 320px;
+        margin: 24px auto 0 !important;
+        gap: 12px;
+    }
+
+    .hero-cta-buttons .btn-premium-primary {
+        width: 100%;
+        padding: 14px 20px !important;
+        font-size: 1rem !important;
+        text-align: center;
+        white-space: normal;
+        justify-content: center;
+    }
+
+    .btn-waitlist .btn-main-text {
+        font-size: 0.95rem;
+    }
+
+    .btn-waitlist .btn-sub-text {
+        font-size: 0.7rem;
+    }
+
+    /* Keep scroll-down arrow visible */
+    .scroll-down {
+        bottom: 20px;
+        font-size: 1.5rem;
+    }
+}
+
+/* --- Small phones (≤ 480 px) --- */
+@media (max-width: 480px) {
+
+    .hero-premium.hero-bg-image {
+        padding: 90px 16px 70px;
+    }
+
+    .hero-centered-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .hero-centered-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-cta-buttons {
+        max-width: 280px;
+    }
+}
+
+/* --- Very small phones (≤ 360 px) --- */
+@media (max-width: 360px) {
+
+    .hero-centered-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-centered-subtitle {
+        font-size: 0.95rem;
+    }
+}
+
+/* --- Landscape phones (short but wide) --- */
+@media (max-width: 768px) and (orientation: landscape) {
+
+    .hero-premium.hero-bg-image {
+        min-height: auto;
+        padding: 80px 20px 60px;
+    }
+
+    .hero-centered-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-centered-subtitle {
+        font-size: 0.95rem;
+    }
+}
+
+
+/* ============================================================
+   FIX 2 — "HOW GYMINGLE WORKS" SECTION
+   Problem: The grid is set with `display: grid; grid-template-columns: repeat(3, 1fr)`
+   INLINE in the HTML, which overrides any external CSS rule.
+   We use !important to force a single-column layout on mobile.
+   ============================================================ */
+
+/* --- Tablets (≤ 768 px) --- */
+@media (max-width: 768px) {
+
+    /* Override the inline style on the .how-grid div */
+    #how .how-grid,
+    .how-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        margin-top: 30px !important;
+    }
+
+    .how-card {
+        padding: 30px 24px;
+        border-radius: 20px;
+    }
+
+    .how-card h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* --- Small phones (≤ 480 px) --- */
+@media (max-width: 480px) {
+
+    .how-card {
+        padding: 24px 20px;
+    }
+
+    .how-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .how-card p {
+        font-size: 0.95rem;
+    }
+}
+
+
+/* ============================================================
+   FIX 3 — SAFETY & VERIFICATION IMAGE (sv-images-wrap)
+   Problem: On mobile the image column collapses to zero height /
+   width because:
+     a) .sv-layout stacks vertically but .sv-images-wrap has no
+        explicit width/height.
+     b) .sv-images-container relies on aspect-ratio + max-width
+        but has no minimum dimensions.
+     c) The <img> tags use opacity:0 by default and only switch to
+        opacity:1 when `.active` — the JavaScript may not fire
+        early enough on some devices, so a fallback ensures the
+        first image is always visible.
+   ============================================================ */
+
+/* --- Tablets (≤ 768 px) --- */
+@media (max-width: 768px) {
+
+    /* Stack layout vertically */
+    .sv-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+    }
+
+    /* Text card takes full width */
+    .sv-card-wrap {
+        width: 100%;
+        flex: none;
+    }
+
+    /* Image column: centred, full width up to a comfortable cap */
+    .sv-images-wrap {
+        width: 100%;
+        flex: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* The phone-mockup container: fixed pixel dimensions on mobile
+       so aspect-ratio alone cannot collapse it to nothing */
+    .sv-images-container {
+        position: relative;
+        width: 220px !important;         /* explicit width — prevents collapse  */
+        max-width: 260px;
+        height: 390px !important;        /* explicit height — prevents collapse */
+        aspect-ratio: 9 / 16;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        background: #f0f0f0;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        display: block;                  /* ensure it is not inadvertently hidden */
+    }
+
+    /* Images inside the container */
+    .sv-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;              /* fill the phone frame properly */
+        object-position: center top;    /* show the top of app screenshots */
+        opacity: 0;
+        transition: opacity 0.7s ease-in-out;
+        border-radius: 22px;
+        background-color: #f0f0f0;
+        display: block;                 /* ensure img is never display:none */
+    }
+
+    /* Active image must be visible */
+    .sv-img.active {
+        opacity: 1 !important;
+        z-index: 2;
+    }
+
+    /* Fallback: if no .active class is present at all, show first img */
+    .sv-images-container .sv-img:first-child {
+        opacity: 1;
+        z-index: 1;
+    }
+
+    /* Once JS has run and added .active to the correct image, hide the
+       CSS fallback so there's no double-exposure bleed */
+    .sv-images-container:has(.sv-img.active) .sv-img:first-child:not(.active) {
+        opacity: 0;
+        z-index: 0;
+    }
+
+    /* Card min-height */
+    .sv-card {
+        min-height: 260px;
+        padding: 28px 22px;
+    }
+
+    .sv-slide {
+        top: 28px;
+        left: 22px;
+        right: 22px;
+        bottom: 28px;
+    }
+}
+
+/* --- Small phones (≤ 480 px) --- */
+@media (max-width: 480px) {
+
+    .sv-images-container {
+        width: 180px !important;
+        height: 320px !important;
+    }
+
+    .sv-card {
+        min-height: 300px;
+        padding: 24px 18px;
+    }
+
+    .sv-slide {
+        top: 24px;
+        left: 18px;
+        right: 18px;
+        bottom: 24px;
+    }
+
+    .sv-tag {
+        font-size: 1rem;
+        margin-bottom: 14px;
+    }
+
+    .sv-list li {
+        font-size: 0.9rem;
+        padding: 10px 0 10px 26px;
+    }
+}
+
+/* --- Very small phones (≤ 360 px) --- */
+@media (max-width: 360px) {
+
+    .sv-images-container {
+        width: 160px !important;
+        height: 285px !important;
+    }
+
+    .sv-card {
+        padding: 20px 14px;
+        min-height: 320px;
+    }
+
+    .sv-slide {
+        top: 20px;
+        left: 14px;
+        right: 14px;
+        bottom: 20px;
+    }
+}
+
+
+/* ============================================================
+   ADDITIONAL RESPONSIVE IMPROVEMENTS NOTICED DURING REVIEW
+   ============================================================ */
+
+/* 1. Section headings: centred underline on mobile
+   The ::after line is left-aligned by default (left: 0) which
+   looks odd when the heading is centred. */
+@media (max-width: 768px) {
+    .section h2.text-center::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* 2. Teach & Grow grid: ensure single column on narrow screens
+   (min-width:280px on flex children can cause them to overflow
+   on phones narrower than ~620px) */
+@media (max-width: 620px) {
+    .teach-grow-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .teach-grow-card {
+        min-width: unset;
+        width: 100%;
+    }
+}
+
+/* 3. Comparison table: make it horizontally scrollable on mobile */
+@media (max-width: 768px) {
+    .comparison-table-view {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .feature-comparison-table {
+        min-width: 560px;
+    }
+}
+
+/* 4. Footer: stack cleanly on mobile (already partly handled,
+   this ensures the prototype button doesn't overflow) */
+@media (max-width: 480px) {
+    .prototype-button {
+        min-width: unset;
+        width: 100%;
+        max-width: 300px;
+    }
+}/* ============================================================
+   SHARED MOBILE BASE
+   ============================================================ */
+@media (max-width: 768px) {
+    .desktop-nav {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+
+    .mobile-menu.active {
+        display: block;
+        animation: slideDownMenu 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+}
+
+
+/* ============================================================
+   FIX 1 — HERO / HOME SECTION
+   Problem: Text overflows or misaligns on mobile because the
+   font sizes are desktop-only (4rem title, 2.2rem subtitle)
+   and the container has no min-height safeguard on small screens.
+   ============================================================ */
+
+/* --- Tablets (≤ 768 px) --- */
+@media (max-width: 768px) {
+
+    /* Give the hero a comfortable height without forcing 100vh
+       (which causes the text to be pushed off-screen on short
+       phones when the keyboard is open, etc.) */
+    .hero-premium.hero-bg-image {
+        min-height: 100svh;           /* svh = small viewport height, avoids browser-chrome issues */
+        min-height: 100vh;            /* fallback for browsers without svh */
+        padding: 100px 20px 80px;     /* top clearance for sticky header */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* The overlay must cover the full section */
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Centre-align the container on mobile */
+    .hero-premium-container.hero-centered-container {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Content block: full-width, centred, with breathing room */
+    .hero-centered-content {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 16px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Scale title down so it fits on a 375 px screen */
+    .hero-centered-title {
+        font-size: 2.4rem;
+        line-height: 1.15;
+        margin-bottom: 14px;
+        word-break: break-word;
+    }
+
+    /* Scale subtitle down proportionally */
+    .hero-centered-subtitle {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        padding-bottom: 12px;
+        margin-bottom: 0;
+    }
+
+    /* Stack the CTA buttons vertically and centre them */
+    .hero-cta-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100%;
+        max-width: 320px;
+        margin: 24px auto 0 !important;
+        gap: 10px;
+    }
+
+    /* ===== FIXED BUTTON STYLES - SLEEKER ON MOBILE ===== */
+    .hero-cta-buttons .btn-premium-primary {
+        width: 100%;
+        padding: 10px 16px !important;  /* Reduced from 14px 20px to make buttons sleeker */
+        font-size: 0.95rem !important;
+        text-align: center;
+        white-space: normal;
+        justify-content: center;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    /* First button - Join waitlist */
+    .btn-waitlist {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        line-height: 1.3;
+        padding: 8px 16px !important;  /* More compact padding */
+    }
+
+    .btn-waitlist .btn-main-text {
+        font-size: 0.9rem;  /* Slightly smaller */
+        font-weight: 700;
+    }
+
+    .btn-waitlist .btn-sub-text {
+        font-size: 0.65rem;  /* Smaller for better proportion */
+        opacity: 0.9;
+        margin-top: 2px;
+    }
+
+    /* Second button - Experience Gymingle */
+    .btn-outline {
+        background: transparent !important;
+        border: 2px solid var(--primary-color) !important;
+        color: white !important;
+        padding: 10px 16px !important;
+        font-size: 0.9rem !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-outline i {
+        font-size: 0.85rem;
+        transition: transform 0.3s ease;
+    }
+
+    .btn-outline:hover i {
+        transform: translateX(3px);
+    }
+
+    /* Keep scroll-down arrow visible */
+    .scroll-down {
+        bottom: 20px;
+        font-size: 1.5rem;
+    }
+}
+
+/* --- Small phones (≤ 480 px) --- */
+@media (max-width: 480px) {
+
+    .hero-premium.hero-bg-image {
+        padding: 90px 16px 70px;
+    }
+
+    .hero-centered-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .hero-centered-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-cta-buttons {
+        max-width: 280px;
+        gap: 8px;  /* Reduced gap */
+    }
+
+    /* Even sleeker buttons for small phones */
+    .hero-cta-buttons .btn-premium-primary {
+        padding: 8px 14px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .btn-waitlist {
+        padding: 6px 14px !important;
+    }
+
+    .btn-waitlist .btn-main-text {
+        font-size: 0.85rem;
+    }
+
+    .btn-waitlist .btn-sub-text {
+        font-size: 0.6rem;
+    }
+
+    .btn-outline {
+        padding: 8px 14px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* --- Very small phones (≤ 360 px) --- */
+@media (max-width: 360px) {
+
+    .hero-centered-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-centered-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .hero-cta-buttons {
+        max-width: 260px;
+    }
+
+    .hero-cta-buttons .btn-premium-primary {
+        padding: 7px 12px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .btn-waitlist {
+        padding: 5px 12px !important;
+    }
+
+    .btn-waitlist .btn-main-text {
+        font-size: 0.8rem;
+    }
+
+    .btn-waitlist .btn-sub-text {
+        font-size: 0.55rem;
+    }
+
+    .btn-outline {
+        padding: 7px 12px !important;
+        font-size: 0.8rem !important;
+    }
+}
+
+/* --- Landscape phones (short but wide) --- */
+@media (max-width: 768px) and (orientation: landscape) {
+
+    .hero-premium.hero-bg-image {
+        min-height: auto;
+        padding: 80px 20px 60px;
+    }
+
+    .hero-centered-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-centered-subtitle {
+        font-size: 0.95rem;
+    }
+
+    /* Landscape mode mein bhi buttons sleek rahein */
+    .hero-cta-buttons {
+        flex-direction: row !important;  /* Horizontal in landscape */
+        max-width: 500px;
+        gap: 15px;
+    }
+
+    .hero-cta-buttons .btn-premium-primary {
+        width: auto;
+        padding: 8px 20px !important;
+    }
+}
+
+
+/* ============================================================
+   FIX 2 — "HOW GYMINGLE WORKS" SECTION
+   Problem: The grid is set with `display: grid; grid-template-columns: repeat(3, 1fr)`
+   INLINE in the HTML, which overrides any external CSS rule.
+   We use !important to force a single-column layout on mobile.
+   ============================================================ */
+
+/* --- Tablets (≤ 768 px) --- */
+@media (max-width: 768px) {
+
+    /* Override the inline style on the .how-grid div */
+    #how .how-grid,
+    .how-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        margin-top: 30px !important;
+    }
+
+    .how-card {
+        padding: 30px 24px;
+        border-radius: 20px;
+    }
+
+    .how-card h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* --- Small phones (≤ 480 px) --- */
+@media (max-width: 480px) {
+
+    .how-card {
+        padding: 24px 20px;
+    }
+
+    .how-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .how-card p {
+        font-size: 0.95rem;
+    }
+}
+
+
+/* ============================================================
+   FIX 3 — SAFETY & VERIFICATION IMAGE (sv-images-wrap)
+   Problem: On mobile the image column collapses to zero height /
+   width because:
+     a) .sv-layout stacks vertically but .sv-images-wrap has no
+        explicit width/height.
+     b) .sv-images-container relies on aspect-ratio + max-width
+        but has no minimum dimensions.
+     c) The <img> tags use opacity:0 by default and only switch to
+        opacity:1 when `.active` — the JavaScript may not fire
+        early enough on some devices, so a fallback ensures the
+        first image is always visible.
+   ============================================================ */
+
+/* --- Tablets (≤ 768 px) --- */
+@media (max-width: 768px) {
+
+    /* Stack layout vertically */
+    .sv-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+    }
+
+    /* Text card takes full width */
+    .sv-card-wrap {
+        width: 100%;
+        flex: none;
+    }
+
+    /* Image column: centred, full width up to a comfortable cap */
+    .sv-images-wrap {
+        width: 100%;
+        flex: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* The phone-mockup container: fixed pixel dimensions on mobile
+       so aspect-ratio alone cannot collapse it to nothing */
+    .sv-images-container {
+        position: relative;
+        width: 220px !important;         /* explicit width — prevents collapse  */
+        max-width: 260px;
+        height: 390px !important;        /* explicit height — prevents collapse */
+        aspect-ratio: 9 / 16;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        background: #f0f0f0;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        display: block;                  /* ensure it is not inadvertently hidden */
+    }
+
+    /* Images inside the container */
+    .sv-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;              /* fill the phone frame properly */
+        object-position: center top;    /* show the top of app screenshots */
+        opacity: 0;
+        transition: opacity 0.7s ease-in-out;
+        border-radius: 22px;
+        background-color: #f0f0f0;
+        display: block;                 /* ensure img is never display:none */
+    }
+
+    /* Active image must be visible */
+    .sv-img.active {
+        opacity: 1 !important;
+        z-index: 2;
+    }
+
+    /* Fallback: if no .active class is present at all, show first img */
+    .sv-images-container .sv-img:first-child {
+        opacity: 1;
+        z-index: 1;
+    }
+
+    /* Once JS has run and added .active to the correct image, hide the
+       CSS fallback so there's no double-exposure bleed */
+    .sv-images-container:has(.sv-img.active) .sv-img:first-child:not(.active) {
+        opacity: 0;
+        z-index: 0;
+    }
+
+    /* Card min-height */
+    .sv-card {
+        min-height: 260px;
+        padding: 28px 22px;
+    }
+
+    .sv-slide {
+        top: 28px;
+        left: 22px;
+        right: 22px;
+        bottom: 28px;
+    }
+}
+
+/* --- Small phones (≤ 480 px) --- */
+@media (max-width: 480px) {
+
+    .sv-images-container {
+        width: 180px !important;
+        height: 320px !important;
+    }
+
+    .sv-card {
+        min-height: 300px;
+        padding: 24px 18px;
+    }
+
+    .sv-slide {
+        top: 24px;
+        left: 18px;
+        right: 18px;
+        bottom: 24px;
+    }
+
+    .sv-tag {
+        font-size: 1rem;
+        margin-bottom: 14px;
+    }
+
+    .sv-list li {
+        font-size: 0.9rem;
+        padding: 10px 0 10px 26px;
+    }
+}
+
+/* --- Very small phones (≤ 360 px) --- */
+@media (max-width: 360px) {
+
+    .sv-images-container {
+        width: 160px !important;
+        height: 285px !important;
+    }
+
+    .sv-card {
+        padding: 20px 14px;
+        min-height: 320px;
+    }
+
+    .sv-slide {
+        top: 20px;
+        left: 14px;
+        right: 14px;
+        bottom: 20px;
+    }
+}
+
+
+/* ============================================================
+   ADDITIONAL RESPONSIVE IMPROVEMENTS NOTICED DURING REVIEW
+   ============================================================ */
+
+/* 1. Section headings: centred underline on mobile
+   The ::after line is left-aligned by default (left: 0) which
+   looks odd when the heading is centred. */
+@media (max-width: 768px) {
+    .section h2.text-center::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* 2. Teach & Grow grid: ensure single column on narrow screens
+   (min-width:280px on flex children can cause them to overflow
+   on phones narrower than ~620px) */
+@media (max-width: 620px) {
+    .teach-grow-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .teach-grow-card {
+        min-width: unset;
+        width: 100%;
+    }
+}
+
+/* 3. Comparison table: make it horizontally scrollable on mobile */
+@media (max-width: 768px) {
+    .comparison-table-view {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .feature-comparison-table {
+        min-width: 560px;
+    }
+}
+
+/* 4. Footer: stack cleanly on mobile (already partly handled,
+   this ensures the prototype button doesn't overflow) */
+@media (max-width: 480px) {
+    .prototype-button {
+        min-width: unset;
+        width: 100%;
+        max-width: 300px;
+    }
+}
