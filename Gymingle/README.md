@@ -85,4 +85,4 @@ For enquiries, visit the contact section on the website or reach out via the wai
 
 ---
 
-© 2025 Gymingle. All rights reserved.
+© 2026 Gymingle. All rights reserved.
